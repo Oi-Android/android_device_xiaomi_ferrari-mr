@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #set -e
-export DEVICE=tomato
-export VENDOR=yu
+export DEVICE=ferrari
+export VENDOR=xiaomi
 
 if [ $# -eq 0 ]; then
   SRC=adb
@@ -55,7 +55,6 @@ function extract() {
 BASE=../../../vendor/$VENDOR/$DEVICE/proprietary
 rm -rf $BASE/*
 
-extract ../../$VENDOR/$DEVICE/proprietary-files-qc.txt $BASE
 extract ../../$VENDOR/$DEVICE/proprietary-files.txt $BASE
 
 ./setup-makefiles.sh

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DEVICE=tomato
-VENDOR=yu
+VENDOR=xiaomi
+DEVICE=ferrari
 
 OUTDIR=vendor/$VENDOR/$DEVICE
 MAKEFILE=../../../$OUTDIR/$DEVICE-vendor-blobs.mk
@@ -47,33 +47,6 @@ for FILE in `egrep -v '(^#|^$)' proprietary-files.txt`; do
 done
 (cat << EOF) >> $MAKEFILE
 
-ifeq (\$(QCPATH),)
-PRODUCT_COPY_FILES += \\
-EOF
-
-LINEEND=" \\"
-COUNT=`wc -l proprietary-files-qc.txt | awk {'print $1'}`
-DISM=`egrep -c '(^#|^$)' proprietary-files-qc.txt`
-COUNT=`expr $COUNT - $DISM`
-for FILE in `egrep -v '(^#|^$)' proprietary-files-qc.txt`; do
-  COUNT=`expr $COUNT - 1`
-  if [ $COUNT = "0" ]; then
-    LINEEND=""
-  fi
-  # Split the file from the destination (format is "file[:destination]")
-  OLDIFS=$IFS IFS=":" PARSING_ARRAY=($FILE) IFS=$OLDIFS
-  if [[ ! "$FILE" =~ ^-.* ]]; then
-    FILE=`echo ${PARSING_ARRAY[0]} | sed -e "s/^-//g"`
-    DEST=${PARSING_ARRAY[1]}
-    if [ -n "$DEST" ]; then
-      FILE=$DEST
-    fi
-    echo "    $OUTDIR/proprietary/$FILE:system/$FILE$LINEEND" >> $MAKEFILE
-  fi
-done
-(cat << EOF) >> $MAKEFILE
-endif
-
 EOF
 
 (cat << EOF) > ../../../$OUTDIR/$DEVICE-vendor.mk
@@ -107,6 +80,7 @@ PRODUCT_PACKAGES += \\
     qcrilhook
 
 PRODUCT_PACKAGES += \\
+    libqct_resampler \\
     libmm-abl
 
 PRODUCT_PACKAGES += \\
@@ -156,7 +130,7 @@ EOF
 
 LOCAL_PATH := \$(call my-dir)
 
-ifeq (\$(TARGET_DEVICE),tomato)
+ifeq (\$(TARGET_DEVICE),ferrari)
 ifeq (\$(QCPATH),)
 
 include \$(CLEAR_VARS)
@@ -248,7 +222,7 @@ include \$(BUILD_PREBUILT)
 
 include \$(CLEAR_VARS)
 LOCAL_MODULE := libtime_genoff
-LOCAL_MODULE_OWNER := yu
+LOCAL_MODULE_OWNER := $VENDOR
 LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libtime_genoff.so
 LOCAL_SRC_FILES_32 := proprietary/vendor/lib/libtime_genoff.so
 LOCAL_MODULE_TAGS := optional

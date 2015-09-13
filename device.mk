@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-$(call inherit-product-if-exists, vendor/yu/tomato/tomato-vendor.mk)
+$(call inherit-product-if-exists, vendor/xiaomi/ferrari/ferrari-vendor.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -101,10 +101,6 @@ PRODUCT_COPY_FILES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.target.rc
-
-# Recovery
-PRODUCT_EXTRA_RECOVERY_KEYS += \
-    $(LOCAL_PATH)/tomato-releasekey
 
 # Sensors
 PRODUCT_PACKAGES += \

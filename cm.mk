@@ -12,24 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(call inherit-product, device/yu/tomato/full_tomato.mk)
+$(call inherit-product, device/xiaomi/ferrari/full_ferrari.mk)
 
 # Inherit some common CM stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
-PRODUCT_NAME := cm_tomato
-BOARD_VENDOR := yu
-PRODUCT_DEVICE := tomato
+# Device identifier. This must come after all inclusions
+PRODUCT_DEVICE := ferrari
+PRODUCT_NAME := cm_ferrari
+PRODUCT_BRAND := Xiaomi
+PRODUCT_MODEL := MI 4i
+PRODUCT_MANUFACTURER := Xiaomi
 
-PRODUCT_GMS_CLIENTID_BASE := android-micromax
+PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
-TARGET_VENDOR_PRODUCT_NAME := YUREKA
-TARGET_VENDOR_DEVICE_NAME := YUREKA
-PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=YUREKA PRODUCT_NAME=YUREKA
-
-## Use the latest approved GMS identifiers unless running a signed build
-ifneq ($(SIGN_BUILD),true)
+# Build prop overrides
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT=YU/YUREKA/YUREKA:5.0.2/LRX22G/YNG1TAS1K0:user/release-keys \
-    PRIVATE_BUILD_DESC="YUREKA-user 5.0.2 LRX22G YNG1TAS1K0 release-keys"
-endif
+    TARGET_DEVICE="ferrari" \
+    PRODUCT_NAME="ferrari" \
+    BUILD_FINGERPRINT="Xiaomi/ferrari/ferrari:5.1.1/LMY48B:userdebug/test-keys" \
+    PRIVATE_BUILD_DESC="ferrari-userdebug 5.1.1 LMY48B test-keys"

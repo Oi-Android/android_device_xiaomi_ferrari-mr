@@ -15,7 +15,7 @@
 
 -include device/cyanogen/msm8939-common/BoardConfigCommon.mk
 
-DEVICE_PATH := device/yu/tomato
+DEVICE_PATH := device/xiaomi/ferrari
 
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 
@@ -23,7 +23,19 @@ TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 TARGET_BOARD_INFO_FILE ?= $(DEVICE_PATH)/board-info.txt
 
 # Kernel
-TARGET_KERNEL_CONFIG := cyanogenmod_tomato-64_defconfig
+BOARD_MKBOOTIMG_ARGS               := --ramdisk_offset 0x02000000 --tags_offset 0x01E00000
+BOARD_KERNEL_CMDLINE               := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk
+BOARD_KERNEL_SEPARATED_DT          := true
+BOARD_KERNEL_BASE                  := 0x80000000
+BOARD_KERNEL_PAGESIZE              := 2048
+BOARD_KERNEL_TAGS_OFFSET           := 0x01E00000
+BOARD_RAMDISK_OFFSET               := 0x02000000
+TARGET_KERNEL_SOURCE               := kernel/xiaomi/ferrari
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_CONFIG := ferrari_debug_defconfig
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TARGET_KERNEL_HEADER_ARCH := arm64
+TARGET_USES_UNCOMPRESSED_KERNEL := true
 
 # Properties
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
@@ -60,24 +72,21 @@ endif
 TARGET_GPS_HAL_PATH := $(DEVICE_PATH)/gps
 TARGET_NO_RPC := true
 
-# init
-TARGET_LIBINIT_DEFINES_FILE := $(DEVICE_PATH)/init/init_tomato.c
-
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
-BOARD_BOOTIMAGE_PARTITION_SIZE := 20971520
-BOARD_CACHEIMAGE_PARTITION_SIZE := 134217728
-BOARD_PERSISTIMAGE_PARTITION_SIZE := 10485760
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 20971520
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1258291200
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 13576175616 # 13576192000 - 16384
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x02000000
+BOARD_CACHEIMAGE_PARTITION_SIZE := 402653184
+BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x02000000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1744830464
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 2988269568 # 13576192000 - 16384
 
 # Recovery
 TARGET_RECOVERY_PIXEL_FORMAT := ABGR_8888
-TARGET_RECOVERY_DENSITY := xhdpi
+TARGET_RECOVERY_DENSITY := xxhdpi
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
@@ -100,4 +109,4 @@ WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
 WIFI_DRIVER_MODULE_NAME := "wlan"
 
 # inherit from the proprietary version
--include vendor/yu/tomato/BoardConfigVendor.mk
+-include vendor/xiaomi/ferrari/BoardConfigVendor.mk
