@@ -1,4 +1,5 @@
-# Copyright (c) 2009-2012, 2014, The Linux Foundation. All rights reserved.
+#!/system/bin/sh
+# Copyright (c) 2012, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -25,23 +26,54 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-on boot
-    # change file owner for factory test
-    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/firmware_version
-    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/firmware_update
-    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/calibrate
+target="$1"
+serial="$2"
 
-    # Notification LED
-    chown system system /sys/class/leds/red/blink
-    chown system system /sys/class/leds/green/blink
-    chown system system /sys/class/leds/blue/blink
-    chown system system /sys/class/leds/red/led_time
-    chown system system /sys/class/leds/green/led_time
-    chown system system /sys/class/leds/blue/led_time
+# No path is set up at this point so we have to do it here.
+PATH=/sbin:/system/sbin:/system/bin:/system/xbin
+export PATH
 
-    # Touchscreen
-    chown root system /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl
-    chmod 0660 /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl
+mount_needed=false;
 
-    chown root system /sys/devices/soc.0/78b9000.i2c/i2c-5/5-005d/keypad_enable
-    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-005d/keypad_enable
+if [ ! -f /system/etc/boot_fixup ];then
+# This should be the first command
+# remount system as read-write.
+  mount -o rw,remount,barrier=1 /system
+  mount_needed=true;
+fi
+
+# **** WARNING *****
+# This runs in a single-threaded, critical path portion
+# of the Android bootup sequence.  This is to guarantee
+# all necessary system partition fixups are done before
+# the rest of the system starts up.  Run any non-
+# timing critical tasks in a separate process to
+# prevent slowdown at boot.
+
+# Run modem link script
+if [ -f /system/etc/init.qcom.modem_links.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.modem_links.sh
+fi
+
+# Run mdm link script
+if [ -f /system/etc/init.qcom.mdm_links.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.mdm_links.sh
+fi
+
+# Run wifi script
+if [ -f /system/etc/init.qcom.wifi.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.wifi.sh "$target" "$serial"
+fi
+
+# Run the sensor script
+if [ -f /system/etc/init.qcom.sensor.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.sensor.sh
+fi
+
+touch /system/etc/boot_fixup
+
+if $mount_needed ;then
+# This should be the last command
+# remount system as read-only.
+  mount -o ro,remount,barrier=1 /system
+fi

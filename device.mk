@@ -100,7 +100,37 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.target.rc
+    chargeonlymode \
+    fstab.qcom \
+    init.qcom.rc \
+    init.target.rc \
+    init.qcom.usb.rc \
+    ueventd.qcom.rc \
+    init.class_main.sh \
+    init.mdm.sh \
+    init.qcom.class_core.sh \
+    init.qcom.early_boot.sh \
+    init.qcom.factory.sh \
+    init.qcom.sh \
+    init.qcom.syspart_fixup.sh \
+    init.qcom.usb.sh
+
+# QCOM Config Script
+PRODUCT_PACKAGES += \
+    hsic.control.bt.sh \
+    init.qcom.bt.sh \
+    init.qcom.fm.sh \
+    init.qcom.post_boot.sh \
+    init.qcom.wifi.sh \
+    qca6234-service.sh
+
+# Proprietery Firmware
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/etc/android_model_facea.dat:system/etc/android_model_facea.dat \
+    $(LOCAL_PATH)/etc/android_model_faceg.dat:system/etc/android_model_faceg.dat \
+    $(LOCAL_PATH)/etc/xtwifi.conf:system/etc/xtwifi.conf \
+    $(LOCAL_PATH)/etc/calib.cfg:system/etc/calib.cfg \
+    $(LOCAL_PATH)/etc/modem/Diag.cfg:system/etc/modem/Diag.cfg
 
 # Sensors
 PRODUCT_PACKAGES += \
