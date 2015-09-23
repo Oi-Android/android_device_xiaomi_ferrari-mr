@@ -17,4 +17,11 @@ LOCAL_PATH := $(call my-dir)
 
 ifeq ($(TARGET_DEVICE),ferrari)
 include $(call all-makefiles-under,$(LOCAL_PATH))
+
+include $(CLEAR_VARS)
+# TWRP
+$(shell mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc; \
+    cp -a device/xiaomi/ferrari/twrp/twrp.fstab \
+	    $(TARGET_RECOVERY_ROOT_OUT)/etc;)
+
 endif
