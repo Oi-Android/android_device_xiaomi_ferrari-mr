@@ -13,6 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-add_lunch_combo cm_ferrari-eng
-add_lunch_combo cm_ferrari-userdebug
-add_lunch_combo cm_ferrari-user
+add_lunch_combo mk_ferrari-eng
+add_lunch_combo mk_ferrari-userdebug
+add_lunch_combo mk_ferrari-user
