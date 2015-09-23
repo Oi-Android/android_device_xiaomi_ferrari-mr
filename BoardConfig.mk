@@ -71,9 +71,42 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1744830464
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 2988269568 # 13576192000 - 16384
 
 # Recovery
+RECOVERY_FSTAB_VERSION := 2
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/root/fstab.qcom
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
+BOARD_HAS_NO_SELECT_BUTTON := true
+TARGET_USERIMAGES_USE_F2FS := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
-TARGET_RECOVERY_DENSITY := xxhdpi
+TARGET_RECOVERY_DENSITY := hdpi
+
+# Vold
+BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun0/file
+
+# TWRP-Specific
+TW_THEME 							:= portrait_hdpi
+BOARD_HAS_NO_REAL_SDCARD 			:= true
+RECOVERY_SDCARD_ON_DATA 			:= true
+TW_INCLUDE_CRYPTO 					:= true
+TW_CRYPTO_FS_TYPE 					:= "ext4"
+TW_INCLUDE_JB_CRYPTO 				:= true
+TW_INCLUDE_FUSE_EXFAT 				:= true
+TW_EXCLUDE_ENCRYPTED_BACKUPS 		:= true
+TW_INCLUDE_L_CRYPTO 				:= true
+TW_BRIGHTNESS_PATH 					:= /sys/class/leds/lcd-backlight/brightness
+RECOVERY_GRAPHICS_USE_LINELENGTH 	:= true
+BOARD_SUPPRESS_SECURE_ERASE 		:= true
+TW_USE_TOOLBOX 						:= true
+TW_EXCLUDE_SUPERSU 					:= true
+TW_EXCLUDE_MTP 						:= true
+TW_TARGET_USES_QCOM_BSP 			:= true
+TW_NO_SCREEN_BLANK 					:= true
+TW_MAX_BRIGHTNESS 					:= 255
+TW_NEW_ION_HEAP 					:= true
+
+# Video
+TARGET_HAVE_SIGNED_VENUS_FW := true
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
@@ -87,6 +120,13 @@ BOARD_SEPOLICY_UNION += \
     system_server.te \
     system.te \
     wcnss_service.te
+    
+# Qualcomm support
+BOARD_USES_QC_TIME_SERVICES := true
+ifneq ($(QCPATH),)
+BOARD_USES_QCNE := true
+endif
+BOARD_USES_QCOM_HARDWARE := true
 
 # Wifi
 TARGET_PROVIDES_WCNSS_QMI := true
